@@ -18,6 +18,8 @@ package com.google.samples.apps.sunflower
 
 import android.app.Application
 import androidx.work.Configuration
+import com.datatheorem.mobileprotect.MobileProtect
+import com.google.samples.apps.sunflower.R.xml.mobileprotect
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -28,4 +30,9 @@ class MainApplication : Application(), Configuration.Provider {
                 if (BuildConfig.DEBUG) android.util.Log.DEBUG else android.util.Log.ERROR
             )
             .build()
+
+    override fun onCreate() {
+        super.onCreate()
+        MobileProtect.init(this, mobileprotect)
+    }
 }

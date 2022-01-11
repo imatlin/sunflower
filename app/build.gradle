@@ -19,6 +19,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'com.dtplugin.mobileprotect'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -26,7 +27,7 @@ android {
         dataBinding true
     }
     defaultConfig {
-        applicationId "com.google.samples.apps.sunflower"
+        applicationId "ord.matlin.samples.apps.sunflower"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         testInstrumentationRunner "com.google.samples.apps.sunflower.utilities.MainTestRunner"
@@ -74,6 +75,8 @@ android {
 }
 
 dependencies {
+    implementation files('libs/MobileProtect.jar')
+    implementation files('libs/MobileProtect_transformations.jar')
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
     kapt "com.github.bumptech.glide:compiler:$rootProject.glideVersion"
     kapt "com.google.dagger:hilt-android-compiler:$rootProject.hiltVersion"
@@ -114,6 +117,10 @@ dependencies {
     androidTestImplementation "com.google.dagger:hilt-android-testing:$rootProject.hiltVersion"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
     testImplementation "junit:junit:$rootProject.junitVersion"
+
+    implementation files("libs/MobileProtect.jar")
+    implementation files("libs/MobileProtect_transformations.jar")
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.1'
 }
 
 def getUnsplashAccess() {
