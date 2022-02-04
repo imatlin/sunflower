@@ -26,7 +26,7 @@ jobs:
             mkdir -p /tmp/apk
             echo "This is bull" > /tmp/apk/test.txt
             ./gradlew :app:assembleRelease   
-            cp app/build/outputs/apk/debug/app-release.apk /tmp/apk/sunflower-release.apk
+            cp app/build/outputs/apk/release/app-release.apk /tmp/apk/sunflower-release.apk
             ./gradlew :app:assembleDebug   
             cp app/build/outputs/apk/debug/app-debug.apk /tmp/apk/sunflower-debug.apk      
 
