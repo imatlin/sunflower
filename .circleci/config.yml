@@ -18,6 +18,8 @@ jobs:
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    environment:
+      APK_PATH: /tmp/apk
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -25,7 +27,6 @@ jobs:
       - run:
           name: Build debug APK and release APK
           command: |
-            set APK_PATH=/tmp/apk
             mkdir -p ${APK_PATH}
             ./gradlew :app:assembleDebug
             cp app/build/outputs/apk/debug/app-debug.apk ${APK_PATH}/sunflower-debug.apk
