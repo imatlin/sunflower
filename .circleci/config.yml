@@ -14,8 +14,8 @@ jobs:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 
-    resource_class: mdedium
-    
+    resource_class: medium
+
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -23,20 +23,18 @@ jobs:
       - run:
           name: Build debug APK and release APK
           command: |
-            mkdir -p $ARTIFACT_PATH
-            cd $ARTIFACT_PATH
-            ls
-            echo "This is bull" > $ARTIFACT_PATH/test.txt
+            mkdir -p ${CIRCLE_WORKING_DIRECTORY}/apk
+            echo "This is bull" > ${CIRCLE_WORKING_DIRECTORY}/apk/test.txt
 
       - store_artifacts:
-          path: $ARTIFACT_PATH
+          path: ${CIRCLE_WORKING_DIRECTORY}/apk
       ## ./gradlew :app:assembleRelease   ./gradlew :app:assembleDebug   cp app/build/outputs/apk/debug/app-debug.apk ${ARTIFACT_PATH}/sunflower-debug.apk      
       - run:
           name: Submit APK to Data Theorem
           command: |
             step1_response=$(curl -X POST -H "Authorization: APIKey ${DT_API_KEY}"  --data "" https://api.securetheorem.com/uploadapi/v1/upload_init)
             upload_url=$(echo ${step1_response} | cut -f 3 -d" "  | tr -d '"')
-            step2_response=$(curl -F file=@${ARTIFACT_PATH}/sunflower-debug.apk ${upload_url} --retry 3)
+            step2_response=$(curl -F file=@${CIRCLE_WORKING_DIRECTORY}/apk/sunflower-debug.apk ${upload_url} --retry 3)
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
