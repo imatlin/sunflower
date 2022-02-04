@@ -14,6 +14,8 @@ jobs:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 
+    resource_class: mdedium
+    
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -21,13 +23,13 @@ jobs:
       - run:
           name: Build debug APK and release APK
           command: |
-            mkdir -p ${ARTIFACT_PATH}
-            cd ${ARTIFACT_PATH}
+            mkdir -p $ARTIFACT_PATH
+            cd $ARTIFACT_PATH
             ls
-            echo "This is bull" > ${ARTIFACT_PATH}/test.txt
+            echo "This is bull" > $ARTIFACT_PATH/test.txt
 
       - store_artifacts:
-          path: ${ARTIFACT_PATH}
+          path: $ARTIFACT_PATH
       ## ./gradlew :app:assembleRelease   ./gradlew :app:assembleDebug   cp app/build/outputs/apk/debug/app-debug.apk ${ARTIFACT_PATH}/sunflower-debug.apk      
       - run:
           name: Submit APK to Data Theorem
