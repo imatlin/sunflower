@@ -26,15 +26,19 @@ jobs:
           name: Build debug APK and release APK
           command: |
             ./gradlew :app:assembleDebug
-      ## ./gradlew :app:assembleRelease
+            cd ${CIRCLE_WORKING_DIRECTORY}
+            ls 
+            cat "This is bull" > /tmp/apk/test.txt
             
+      - store_artifacts:
+          path: /tmp/apk
+      ## ./gradlew :app:assembleRelease            
       - run:
           name: Submit APK to Data Theorem
           command: |
             step1_response=$(curl -X POST -H "Authorization: APIKey ${DT_API_KEY}"  --data "" https://api.securetheorem.com/uploadapi/v1/upload_init)
             upload_url=$(echo ${step1_response} | cut -f 3 -d" "  | tr -d '"')
-            cd ${CIRCLE_WORKING_DIRECTORY}
-            ls 
+
       ## step2_response=$(curl -F file=@${CIRCLE_WORKING_DIRECTORY}/app/build/outputs/apk/debug/app-debug.apk ${upload_url} --retry 3)
 
 # Invoke jobs via workflows
