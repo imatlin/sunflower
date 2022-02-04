@@ -24,7 +24,7 @@ jobs:
             mkdir -p ${ARTIFACT_PATH}
             cd ${ARTIFACT_PATH}
             ls
-            cat "This is bull" > ${ARTIFACT_PATH}/test.txt
+            echo "This is bull" > ${ARTIFACT_PATH}/test.txt
 
       - store_artifacts:
           path: ${ARTIFACT_PATH}
