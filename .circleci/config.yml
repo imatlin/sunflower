@@ -23,18 +23,22 @@ jobs:
       - run:
           name: Build debug APK and release APK
           command: |
-            mkdir -p ${CIRCLE_WORKING_DIRECTORY}/apk
-            echo "This is bull" > ${CIRCLE_WORKING_DIRECTORY}/apk/test.txt
+            mkdir -p /tmp/apk
+            echo "This is bull" > /tmp/apk/test.txt
+            ./gradlew :app:assembleRelease   
+            cp app/build/outputs/apk/debug/app-release.apk /tmp/apk/sunflower-release.apk
+            ./gradlew :app:assembleDebug   
+            cp app/build/outputs/apk/debug/app-debug.apk /tmp/apk/sunflower-debug.apk      
 
       - store_artifacts:
-          path: ${CIRCLE_WORKING_DIRECTORY}/apk
-      ## ./gradlew :app:assembleRelease   ./gradlew :app:assembleDebug   cp app/build/outputs/apk/debug/app-debug.apk ${ARTIFACT_PATH}/sunflower-debug.apk      
+          path: /tmp/apk
+
       - run:
           name: Submit APK to Data Theorem
           command: |
             step1_response=$(curl -X POST -H "Authorization: APIKey ${DT_API_KEY}"  --data "" https://api.securetheorem.com/uploadapi/v1/upload_init)
             upload_url=$(echo ${step1_response} | cut -f 3 -d" "  | tr -d '"')
-            step2_response=$(curl -F file=@${CIRCLE_WORKING_DIRECTORY}/apk/sunflower-debug.apk ${upload_url} --retry 3)
+            step2_response=$(curl -F file=@$/tmp/apk/sunflower-debug.apk ${upload_url} --retry 3)
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
