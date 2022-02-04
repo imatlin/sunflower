@@ -23,13 +23,13 @@ jobs:
           command: |
             echo ${ARTIFACT_PATH}
             mkdir -p ${ARTIFACT_PATH}
-            ./gradlew :app:assembleDebug
-            cp app/build/outputs/apk/debug/app-debug.apk ${APK_PATH}/sunflower-debug.apk
+            
+            cp app/build/outputs/apk/debug/app-debug.apk ${ARTIFACT_PATH}/sunflower-debug.apk
             cat "This is bull" > ${ARTIFACT_PATH}/test.txt
 
       - store_artifacts:
           path: ${ARTIFACT_PATH}
-      ## ./gradlew :app:assembleRelease            
+      ## ./gradlew :app:assembleRelease   ./gradlew :app:assembleDebug         
       - run:
           name: Submit APK to Data Theorem
           command: |
