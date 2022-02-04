@@ -26,10 +26,9 @@ jobs:
           name: Build debug APK and release APK
           command: |
             ./gradlew :app:assembleDebug
-            cd ${CIRCLE_WORKING_DIRECTORY}
             ls 
             cat "This is bull" > /tmp/apk/test.txt
-            
+
       - store_artifacts:
           path: /tmp/apk
       ## ./gradlew :app:assembleRelease            
