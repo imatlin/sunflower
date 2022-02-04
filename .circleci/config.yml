@@ -18,8 +18,7 @@ jobs:
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-    environment:
-      APK_PATH: /tmp/apk
+
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -27,21 +26,20 @@ jobs:
       - run:
           name: Build debug APK and release APK
           command: |
-            mkdir -p ${APK_PATH}
+            mkdir -p ${ARTIFACT_PATH}
             ./gradlew :app:assembleDebug
             cp app/build/outputs/apk/debug/app-debug.apk ${APK_PATH}/sunflower-debug.apk
-            cat "This is bull" > ${APK_PATH}/test.txt
+            cat "This is bull" > ${ARTIFACT_PATH}/test.txt
 
       - store_artifacts:
-          path: ${APK_PATH}
+          path: ${ARTIFACT_PATH}
       ## ./gradlew :app:assembleRelease            
       - run:
           name: Submit APK to Data Theorem
           command: |
             step1_response=$(curl -X POST -H "Authorization: APIKey ${DT_API_KEY}"  --data "" https://api.securetheorem.com/uploadapi/v1/upload_init)
             upload_url=$(echo ${step1_response} | cut -f 3 -d" "  | tr -d '"')
-
-      ## step2_response=$(curl -F file=@${CIRCLE_WORKING_DIRECTORY} ${upload_url} --retry 3)
+            step2_response=$(curl -F file=@${ARTIFACT_PATH}/sunflower-debug.apk ${upload_url} --retry 3)
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
