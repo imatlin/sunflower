@@ -34,15 +34,15 @@ jobs:
           java-version: 1.11
       - name: Build project
         run: .github/scripts/gradlew_recursive.sh assembleDebug
-      - name: Zip artifacts
-        run: zip -r assemble.zip . -i '**/build/*.apk' '**/build/*.aab' '**/build/*.aar' '**/build/*.so'
       - name: Data Theorem Mobile Secure
         uses: datatheorem/datatheorem-mobile-secure-action@v1.0.3
         with:
           # Data Theorem upload API key
           DT_UPLOAD_API_KEY: ${{ secrets.DT_UPLOAD_API_KEY }} 
           # Path to the app to upload
-          UPLOAD_BINARY_PATH: ./build/app-debug.apk   
+          UPLOAD_BINARY_PATH: app/build/outputs/apk/debug/app-debug.apk   
+      - name: Zip artifacts
+        run: zip -r assemble.zip . -i '**/build/*.apk' '**/build/*.aab' '**/build/*.aar' '**/build/*.so'
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
